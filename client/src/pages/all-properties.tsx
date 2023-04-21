@@ -1,7 +1,6 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import { Add } from '@mui/icons-material';
 import { useTable } from '@pankod/refine-core';
-import { useList } from '@pankod/refine-core'
 import { Typography, Box, Stack, TextField, Select,MenuItem } from "@pankod/refine-mui";
 import { useNavigate } from '@pankod/refine-react-router-v6'
 
@@ -14,16 +13,32 @@ const AllProperties = () => {
       tableQueryResult: { data, isLoading, isError},
       current,
       setCurrent,
+      pageSize,
       setPageSize,
-      pageCount,
+      pageCount, 
       sorter, setSorter,
       filters, setFilters,
      } = useTable();
 
-     console.log(data)
+     
+     //console.log(sorter)
+     const resto = (totalItems:number, itemsPerPage:number) => {
+      if((totalItems % itemsPerPage) === 0 || -0){
+        return (totalItems/itemsPerPage)
+      }
+      else{
+        return(Math.ceil(totalItems/itemsPerPage))
+      }
+     }
      
      const allProperties = data?.data ?? [];
-
+     console.log(pageCount)
+     console.log(pageSize)
+     const [numberPages,setNumberPages] = useState(resto(allProperties.length, pageSize))
+     useEffect (() => {
+        setNumberPages(resto(allProperties.length, pageSize))
+     }, [pageSize])
+     console.log(numberPages)
      const currentPrice = sorter.find((item) => item.field === 'price')?.order;
 
      const toggleSort = (field: string) => {
@@ -111,7 +126,7 @@ const AllProperties = () => {
         </Stack>
 
         <Box mt="20px" sx={{ display: 'flex', flexWrap: 'wrap', gap: 3}}>
-          { allProperties.map((property) => (
+          { allProperties?.map((property) => (
             <PropertyCard 
               key={property._id}
               id={property._id}
@@ -128,7 +143,7 @@ const AllProperties = () => {
           <Box display="flex" gap={2} mt={3} flexWrap="wrap">
               <CustomButton 
                 title="Previuos"
-                handleClick={() => setCurrent((prev) => prev -1)}
+                handleClick={() => setCurrent((prev) => prev - 1)}
                 backgroundColor="#475be8"
                 color="#fcfcfc"
                 disabled={!(current > 1)}
@@ -138,7 +153,7 @@ const AllProperties = () => {
               </Box>
               <CustomButton 
                 title="Next"
-                handleClick={() => setCurrent((prev) => prev +1)}
+                handleClick={() => setCurrent((prev) => prev + 1)}
                 backgroundColor="#475be8"
                 color="#fcfcfc"
                 disabled={current === pageCount}
@@ -151,11 +166,11 @@ const AllProperties = () => {
                       inputProps={{ 'aria-label': 'Without label'}}
                       defaultValue={10}
                      
-                      onChange={(e) => {setPageSize(
+                      onChange={(e) => setPageSize(
                           e.target.value ? Number(e.target.value) : 10
-                      )}}
+                      )}
                     >
-                      {[10, 20, 30, 40, 50].map((size) => (
+                      {[2, 10, 20, 30, 40, 50].map((size) => (
                         
                         <MenuItem key={size} value={size}>Show {size}</MenuItem>
                       ))}

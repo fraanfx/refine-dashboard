@@ -18,7 +18,7 @@ const AgentCard = ({id, name, email, avatar, noOfProperties}: AgentCardProp) => 
 
   const generateLink = () => {
     if(currentUser.email === email) return '/my-profile'
-    return `/agent/show/${id}`;
+    return `/agents/show/${id}`;
   }
 
   return (
@@ -57,11 +57,11 @@ const AgentCard = ({id, name, email, avatar, noOfProperties}: AgentCardProp) => 
               />
               <InfoBar 
               icon={<Place sx={{ color: '#808191'}} />}
-              name="Barcelona"
+              name="To set ..."
               />
               <InfoBar 
               icon={<Phone sx={{ color: '#808191'}} />}
-              name="+34-658684323"
+              name="+To do..."
               />
               <InfoBar 
               icon={<LocationCity sx={{ color: '#808191'}} />}

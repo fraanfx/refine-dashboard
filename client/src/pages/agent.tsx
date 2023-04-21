@@ -6,7 +6,7 @@ import { AgentCard } from 'components';
 
 const Agents = () => {
   const { data, isLoading, isError } = useList({
-    resource: 'api/v1/users',
+    resource: 'users',
   });
 
   const allAgents = data?.data ?? [];

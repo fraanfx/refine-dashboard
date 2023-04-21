@@ -7,7 +7,6 @@ import {
     PieChart,
     PropertyReferrals,
     PropertyCard,
-    TopAgent,
     TotalRevenue
  } 
  from "components";   
@@ -15,7 +14,7 @@ import {
 const Home = () => {
 
     const { data, isLoading, isError} = useList({
-        resource: 'api/v1/properties',
+        resource: 'properties',
         config:{
             pagination: {
                 pageSize: 4,
@@ -78,23 +77,21 @@ const Home = () => {
             minWidth="100%"
             mt="25px"
         >
-            <Typography fontSize="18px" fontWeight={600} color="#11142d">Latest Properties</Typography>
+           <Typography fontSize="18px" fontWeight={600} color="#11142d">Latest Properties</Typography>
 
-            <Box mt={2.5} sx={{ display: 'flex', flexWrap: 'wrap', gap: 4}}>
-                    {latestProperties.map((property) => (
-                        <PropertyCard 
-                            key={property._id}
-                            id={property._id}
-                            title={property.title}
-                            location={property.location}
-                            price={property.price}
-                            photo={property.photo}
-                            
-
-                        />
-                    ))}
-            </Box>
-        </Box>
+                <Box mt={2.5} sx={{ display: 'flex', flexWrap: 'wrap', gap: 4}}>
+                {latestProperties.map((property) => (
+                    <PropertyCard 
+                    key={property._id}
+                    id={property._id}
+                    title={property.title}
+                    location={property.location}
+                    price={property.price}
+                    photo={property.photo}
+                    />
+                ))}
+                </Box>
+</Box> 
     </Box>
     
   )

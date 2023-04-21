@@ -6,11 +6,11 @@ import * as dotenv from 'dotenv';
 import { v2 as cloudinary } from 'cloudinary';
 
 dotenv.config();
+
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
-
 });
 
 const getAllProperties = async (req, res) => {
@@ -35,7 +35,7 @@ const getAllProperties = async (req, res) => {
                 .skip(_start)
                 .sort({ [_sort]: _order})
         res.header('x-total-count', count);
-        res.header('Access-Control-Expose-Header', 'x-total-count');
+        res.header('Access-Control-Expose-Headers', 'x-total-count');
 
 
         res.status(200).json(properties);
@@ -50,9 +50,9 @@ const getPropertyDetail = async (req, res) => {
         _id: id
     }).populate('creator');
 
-    if(propertyExists) 
+    if(propertyExists) {
     res.status(200).json(propertyExists) 
-    else {
+    }else {
         res.status(400).json({ message: 'Property not found' })
     }
 };
@@ -108,7 +108,7 @@ const updateProperty = async (req, res) => {
             propertyType,
             location,
             price,
-            photo: photoUrl || photo
+            photo: photoUrl.url || photo
         })
         res.status(200).json({ message: 'Property updated successfully'});
     }
@@ -131,7 +131,9 @@ const deleteProperty = async (req, res) => {
         const session = await mongoose.startSession();
         session.startTransaction();
 
+        propertyToDelete.deleteOne({session});
         propertyToDelete.creator.allProperties.pull(propertyToDelete);
+        
         await propertyToDelete.creator.save({session});
         await session.commitTransaction();
 
